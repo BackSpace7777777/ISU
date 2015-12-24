@@ -20,6 +20,7 @@ public class Main {
             {
                 super.paintComponent(g);
                 gm.draw(g);
+                repaint();
             }
         };
         gm=new GameManager();

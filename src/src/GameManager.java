@@ -38,8 +38,15 @@ public class GameManager extends Main{
     }
     public void draw(Graphics g)
     {
+        g.clearRect(0,0,panel.getWidth(),panel.getHeight());
+        dp(g);
         drawBoarder(g);
         if(DEBUG)drawWaypoints(g);
+    }
+    private void dp(Graphics g)
+    {
+        g.setColor(Color.BLACK);
+        g.fillRect(mpx[0],mpy[0],25,150);
     }
     private void drawWaypoints(Graphics g)
     {
@@ -50,11 +57,6 @@ public class GameManager extends Main{
             g.setColor(Color.BLACK);
             g.drawString("Point " + i,mpx[i],mpy[i]);
         }
-    }
-    private void drawPath(Graphics g)
-    {
-        g.setColor(Color.MAGENTA);
-        
     }
     private void drawBoarder(Graphics g)
     {
