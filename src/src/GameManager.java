@@ -2,6 +2,8 @@ package src;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GameManager extends Main{
     private Enemy e[];
@@ -40,13 +42,28 @@ public class GameManager extends Main{
     {
         g.clearRect(0,0,panel.getWidth(),panel.getHeight());
         dp(g);
+        drawTowers(g);
         drawBoarder(g);
         if(DEBUG)drawWaypoints(g);
     }
+    private void drawTowers(Graphics g)
+    {
+        
+    }
     private void dp(Graphics g)
     {
-        g.setColor(Color.BLACK);
-        g.fillRect(mpx[0],mpy[0],25,150);
+        g.setColor(Color.BLUE);
+        g.fillRect(mpx[0],mpy[0],25,mpy[1]+75);//0-1
+        g.fillRect(mpx[1],mpy[1],(mpx[2]-mpx[1])+25,25);//1-2
+        g.fillRect(mpx[3],mpy[3],25,mpy[2]-mpy[3]);//2-3
+        g.fillRect(mpx[3],mpy[3],mpx[4]-mpx[3],25);//3-4
+        g.fillRect(mpx[4],mpy[4],25,325);//4-5
+        g.fillRect(mpx[6],mpy[6],mpx[5]-mpx[6],25);//5-6
+        g.fillRect(mpx[6],mpy[6],25,mpy[7]-mpy[6]);//6-7
+        g.fillRect(mpx[7],mpy[7],325,25);//7-8
+        g.fillRect(mpx[9],mpy[9],25,mpy[8]-mpy[9]);//8-9
+        g.fillRect(mpx[9],mpy[9],mpx[10]-mpx[9],25);//9-10
+        g.fillRect(mpx[10],mpy[10],25,mpy[11]-mpy[10]);//10-11
     }
     private void drawWaypoints(Graphics g)
     {
@@ -60,7 +77,6 @@ public class GameManager extends Main{
     }
     private void drawBoarder(Graphics g)
     {
-        g.clearRect(0,0,panel.getWidth(),panel.getHeight());
         g.setColor(Color.BLACK);
         g.fillRect(0,0,10,panel.getHeight());
         g.fillRect(0,0,panel.getWidth(),10);
