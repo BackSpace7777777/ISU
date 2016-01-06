@@ -33,7 +33,7 @@ public class Shooter implements Tower{
     public int getY() {
         return x;
     }
-    public boolean placed()
+    public boolean isPlaced()
     {
         return hasBeenPlaced;
     }

@@ -6,4 +6,6 @@ public interface Tower {
     public void draw(Graphics g);
     public int getX();
     public int getY();
+    public void place();
+    public boolean isPlaced();
 }

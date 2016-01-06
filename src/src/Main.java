@@ -1,7 +1,12 @@
 package src;
 
 import java.awt.Graphics;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -12,6 +17,7 @@ public class Main {
     private static GameManager gm;
     public static final boolean DEBUG=false;
     public static int x,y;
+    public static boolean menuOpen=false,mouseDown=false;
     public static void main(String[] args) {
         frame.setSize(640,640);
         frame.setResizable(false);
@@ -32,6 +38,22 @@ public class Main {
             public void mouseMoved(MouseEvent e) {
                 x=e.getX();
                 y=e.getY();
+            }
+        }); 
+        frame.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                mouseDown=true;
+            }
+            public void mouseReleased(MouseEvent e) {
+                mouseDown=false;
+            }
+        });
+        frame.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyChar()=='m')menuOpen=true;
+            }
+            public void keyReleased(KeyEvent e) {
+                if(e.getKeyChar()=='m')menuOpen=false;
             }
         });
         frame.add(panel);
