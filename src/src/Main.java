@@ -17,9 +17,9 @@ public class Main {
     private static GameManager gm;
     public static final boolean DEBUG=false;
     public static int x,y;
-    public static boolean menuOpen=false,mouseDown=false;
+    public static boolean menuOpen=false,mouseDown=false,readMenuKey=true;
     public static void main(String[] args) {
-        frame.setSize(640,640);
+        frame.setSize(640,840);
         frame.setResizable(false);
         frame.setLayout(null);
         frame.setDefaultCloseOperation(3);
@@ -50,7 +50,7 @@ public class Main {
         });
         frame.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyChar()=='m')menuOpen=true;
+                if(e.getKeyChar()=='m'&&readMenuKey)menuOpen=true;
             }
             public void keyReleased(KeyEvent e) {
                 if(e.getKeyChar()=='m')menuOpen=false;

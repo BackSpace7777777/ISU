@@ -2,8 +2,6 @@ package src;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import src.Towers.Shooter;
 
 public class GameManager extends Main{
@@ -43,37 +41,21 @@ public class GameManager extends Main{
     public void draw(Graphics g)
     {
         g.clearRect(0,0,panel.getWidth(),panel.getHeight());
-        if(Main.menuOpen)drawMenu(g);
-        else
-        {
-            dp(g);
-            drawTowers(g);
-            drawBoarder(g);
-            if(DEBUG)drawWaypoints(g);
-        }
+        dp(g);
+        drawTowers(g);
+        drawMenu(g);
+        drawBoarder(g);
+        if(DEBUG)drawWaypoints(g);
     }
     private void drawMenu(Graphics g)
     {
-        g.setColor(Color.WHITE);
-        g.fillRect(0,0,panel.getWidth(),panel.getHeight());
-        g.setColor(Color.BLACK);
-        if(x>5&&x<55&&y>5&&y<55&&mouseDown==false)g.setColor(Color.DARK_GRAY);
-        else if(x>5&&x<55&&y>5&&y<55&&mouseDown)
-        {
-            placingTower=new Shooter();
-            menuOpen=false;
-        }
-        g.fillRect(5,5,50,50);
-        g.setColor(Color.WHITE);
-        g.drawString("Shooter",10,20);
-        g.drawString("Tower",10,35);
+        g.setColor(Color.darkGray);
+        g.fillRect(0,620,640,120);
+        
     }
     private void drawTowers(Graphics g)
     {
-        if(placingTower.isPlaced())
-        {
-            
-        }
+        
     }
     private void dp(Graphics g)
     {

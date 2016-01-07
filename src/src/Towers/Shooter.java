@@ -1,5 +1,6 @@
 package src.Towers;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import src.Main;
 import src.Tower;
@@ -25,7 +26,8 @@ public class Shooter implements Tower{
     }
     private void drawM(Graphics g)
     {
-        
+        g.setColor(Color.RED);
+        g.fillRect(x,y,10,10);
     }
     public int getX() {
         return y;
