@@ -40,20 +40,12 @@ public class Main {
                 y=e.getY();
             }
         }); 
-        frame.addMouseListener(new MouseAdapter() {
+        panel.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 mouseDown=true;
             }
             public void mouseReleased(MouseEvent e) {
                 mouseDown=false;
-            }
-        });
-        frame.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                if(e.getKeyChar()=='m'&&readMenuKey)menuOpen=true;
-            }
-            public void keyReleased(KeyEvent e) {
-                if(e.getKeyChar()=='m')menuOpen=false;
             }
         });
         frame.add(panel);

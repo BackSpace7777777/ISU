@@ -8,9 +8,14 @@ import src.Tower;
 public class Shooter implements Tower{
     private int x,y;
     private boolean hasBeenPlaced=false;
+    public Shooter(int inx,int iny)
+    {
+        x=inx;
+        y=iny;
+    }
     public Shooter()
     {
-        
+        this(0,0);
     }
     public void draw(Graphics g) {
         if(hasBeenPlaced)
@@ -42,5 +47,19 @@ public class Shooter implements Tower{
     public void place()
     {
         hasBeenPlaced=true;
+    }
+    public void setX(int i) {
+        x=i;
+        System.out.println("Set");
+    }
+    public void setY(int i) {
+        y=i;
+    }
+    public String getName()
+    {
+        return "Shooter";
+    }
+    public void exec() {
+        
     }
 }

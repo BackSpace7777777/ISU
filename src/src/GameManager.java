@@ -2,15 +2,19 @@ package src;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import src.Towers.Shooter;
 
 public class GameManager extends Main{
-    private Enemy e[];
-    private Tower t[];
+    private ArrayList<Enemy> e;
+    private ArrayList<Tower> t;
     private int[] mpx,mpy;
     private Tower placingTower;
+    private boolean alreadySpawned=false;
     public GameManager()
     {
+        t=new ArrayList<>();
+        e=new ArrayList<>();
         mpx=new int[12];
         mpy=new int[12];
         mpx[0]=20;
@@ -50,12 +54,52 @@ public class GameManager extends Main{
     private void drawMenu(Graphics g)
     {
         g.setColor(Color.darkGray);
-        g.fillRect(0,620,640,120);
+        g.fillRect(0,620,640,180);
+        g.setColor(Color.BLACK);
+        if(x>20&&x<20+50&&y>630&&y<630+50&&mouseDown==false)g.setColor(Color.LIGHT_GRAY);
+        else if(x>20&&x<20+50&&y>630&&y<630+50&&mouseDown&&alreadySpawned)g.setColor(Color.GREEN);
+        else if(x>20&&x<20+50&&y>630&&y<630+50&&mouseDown&&alreadySpawned==false)
+        {
+            g.setColor(Color.GREEN);
+            alreadySpawned=true;
+            placingTower=new Shooter();
+            mouseDown=false;
+        }
+        g.fillRect(20,630,50,50);
         
     }
     private void drawTowers(Graphics g)
     {
-        
+        try
+        {
+            if(alreadySpawned&&mouseDown&&placingTower!=null)
+            {
+                alreadySpawned=false;
+                if(placingTower.getName().equals("Shooter"))
+                {
+                    Shooter temp=new Shooter(placingTower.getX(),placingTower.getY());
+                    t.add(temp);
+                }
+                placingTower=null;
+                System.out.println("Added");
+            }
+            else if(alreadySpawned&&placingTower!=null)
+            {
+                placingTower.setX(x);
+                placingTower.setY(y);
+                placingTower.draw(g);
+                System.out.println("Drawing PlacingTower");
+            }
+        }
+        catch(NullPointerException ex){}
+        if(t.size()>0)
+        {
+            for(int i=0;i<t.size();i++)
+            {
+                t.get(i).draw(g);
+                System.out.println(t.get(i).getX() + " " + t.get(i).getY() + " " + t.size());
+            }
+        }
     }
     private void dp(Graphics g)
     {
