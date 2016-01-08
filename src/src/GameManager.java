@@ -77,8 +77,7 @@ public class GameManager extends Main{
                 alreadySpawned=false;
                 if(placingTower.getName().equals("Shooter"))
                 {
-                    Shooter temp=new Shooter(placingTower.getX(),placingTower.getY());
-                    t.add(temp);
+                    t.add(new Shooter(placingTower.getX(),placingTower.getY()));
                 }
                 placingTower=null;
                 System.out.println("Added");
@@ -90,6 +89,10 @@ public class GameManager extends Main{
                 placingTower.draw(g);
                 System.out.println("Drawing PlacingTower");
             }
+            else
+            {
+                System.out.println("This");
+            }
         }
         catch(NullPointerException ex){}
         if(t.size()>0)
@@ -97,7 +100,7 @@ public class GameManager extends Main{
             for(int i=0;i<t.size();i++)
             {
                 t.get(i).draw(g);
-                System.out.println(t.get(i).getX() + " " + t.get(i).getY() + " " + t.size());
+                //System.out.println(t.get(i).getX() + " " + t.get(i).getY() + " " + t.size());
             }
         }
     }
