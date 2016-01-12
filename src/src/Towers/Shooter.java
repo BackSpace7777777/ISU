@@ -50,7 +50,6 @@ public class Shooter implements Tower{
     }
     public void setX(int i) {
         x=i;
-        System.out.println("Set");
     }
     public void setY(int i) {
         y=i;
