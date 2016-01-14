@@ -7,7 +7,7 @@ import src.GameManager;
 
 public class LevelEnemy extends GameManager implements Enemy{
     private int x,y,level,speed,arrayPos=0,index;
-    private boolean isAlive;
+    private boolean isAlive,isThrough=false;
     private int[] xTargets,yTargets;
     public LevelEnemy(int level,int[] xtarg,int[] ytarg)
     {
@@ -55,7 +55,7 @@ public class LevelEnemy extends GameManager implements Enemy{
         if(x==xTargets[arrayPos] && y==yTargets[arrayPos])
         {
             if(arrayPos==11)
-                super.enemyThrough(this);
+                isThrough=true;
             else
                 arrayPos++;
         }
@@ -66,6 +66,10 @@ public class LevelEnemy extends GameManager implements Enemy{
             if(y>yTargets[arrayPos])y-=speed;
             else if(y<yTargets[arrayPos])y+=speed;
         }
+    }
+    public boolean isThrough()
+    {
+        return isThrough;
     }
     public boolean isAlive()
     {

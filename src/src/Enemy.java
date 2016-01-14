@@ -9,5 +9,6 @@ public interface Enemy {
     public void setX(int i);
     public void setY(int i);
     public int getLevel();
+    public boolean isThrough();
     public void exec();
 }

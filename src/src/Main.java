@@ -25,6 +25,7 @@ public class Main {
         frame.setResizable(false);
         frame.setLayout(null);
         frame.setDefaultCloseOperation(3);
+        gm=new GameManager();
         panel=new JPanel()
         {
             public void paintComponent(Graphics g)
@@ -37,7 +38,6 @@ public class Main {
                 repaint();
             }
         };
-        gm=new GameManager();
         panel.setBounds(0,0,frame.getWidth()-5,frame.getHeight()-30); 
         panel.addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseMoved(MouseEvent e) {

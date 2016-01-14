@@ -3,9 +3,8 @@ package src;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import src.Enemies.LevelEnemy;
+import src.MenuItems.Button;
 import src.Towers.Shooter;
 
 public class GameManager extends Main{
@@ -16,6 +15,7 @@ public class GameManager extends Main{
     private boolean alreadySpawned=false,spawnEnemies=false;
     private Thread enemySpawner;
     public int health=100;
+    private Button shb;
     public GameManager()
     {
         t=new ArrayList<>();
@@ -61,6 +61,7 @@ public class GameManager extends Main{
             }
         });
         enemySpawner.start();
+        shb=new Button(20,50,"ShooterSpawner");
     }
     public void draw(Graphics g)
     {
@@ -75,20 +76,7 @@ public class GameManager extends Main{
     }
     private void drawMenu(Graphics g)
     {
-        g.setColor(Color.darkGray);
-        g.fillRect(0,620,640,180);
-        g.setColor(Color.BLACK);
-        if(x>20&&x<20+50&&y>630&&y<630+50&&mouseDown==false)g.setColor(Color.LIGHT_GRAY);
-        else if(x>20&&x<20+50&&y>630&&y<630+50&&mouseDown&&alreadySpawned)g.setColor(Color.GREEN);
-        else if(x>20&&x<20+50&&y>630&&y<630+50&&mouseDown&&alreadySpawned==false)
-        {
-            g.setColor(Color.GREEN);
-            alreadySpawned=true;
-            placingTower=new Shooter();
-            mouseDown=false;
-        }
-        g.fillRect(20,630,50,50);
-        
+        shb.draw(g);
     }
     private void drawEnemies(Graphics g)
     {
@@ -96,8 +84,14 @@ public class GameManager extends Main{
         {
             for(int i=0;i<e.size();i++)
             {
-                e.get(i).draw(g);
-                System.out.println(e.size());
+                if(e.get(i).isThrough())
+                {
+                    e.remove(i);
+                }
+                else
+                {
+                    e.get(i).draw(g);
+                }
             }
         }
     }
@@ -124,7 +118,7 @@ public class GameManager extends Main{
             }
             else
             {
-                System.out.println("This");
+                //System.out.println("This");
             }
         }
         catch(NullPointerException ex){}
@@ -170,9 +164,13 @@ public class GameManager extends Main{
         g.fillRect(panel.getWidth()-10,0,10,panel.getHeight());
         g.fillRect(0,panel.getHeight()-10,panel.getWidth(),10);
     }
-    public void enemyThrough(Enemy e)
+    protected void buttonPressed(String name)
     {
-        health--;
-        this.e.remove(e);
+        if(name.equals("ShooterSpawner")&&alreadySpawned==false)
+        {
+            alreadySpawned=true;
+            placingTower=new Shooter();
+            mouseDown=false;
+        }
     }
 }
