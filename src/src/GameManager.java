@@ -172,7 +172,6 @@ public class GameManager extends Main{
             spawnEnemies=true;
         }
     }
-    
     protected Enemy getCloseBy(int rangeMod,String towerName,int x,int y)
     {
         Enemy closeBy=null;
@@ -183,7 +182,6 @@ public class GameManager extends Main{
             int tempX=e.get(i).getX()+12,tempY=e.get(i).getY()+12;
             if(towerName.equals("Shooter"))
             {
-                
                 if(tempX>=tX-(100+rangeMod)&&tempX<=tX+(100+rangeMod)&&tempY>=tY-(100+rangeMod)&&tempY<=tY+(100+rangeMod))
                 {
                     closeBy=e.get(i);
