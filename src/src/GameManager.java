@@ -4,18 +4,17 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import src.Enemies.LevelEnemy;
-import src.MenuItems.Button;
 import src.Towers.Shooter;
 
 public class GameManager extends Main{
-    private ArrayList<Enemy> e;
-    private ArrayList<Tower> t;
+    protected ArrayList<Enemy> e;
+    protected ArrayList<Tower> t;
     private int[] mpx,mpy;
-    private Tower placingTower;
-    private boolean alreadySpawned=false,spawnEnemies=false;
-    private Thread enemySpawner;
+    private boolean spawnEnemies=false,onMouseToPlace=false;
+    //private Thread enemySpawner;
     public int health=100;
-    private Button shb;
+    private static int eSize;
+    private long start=System.currentTimeMillis(),end=0;
     public GameManager()
     {
         t=new ArrayList<>();
@@ -46,25 +45,30 @@ public class GameManager extends Main{
         mpy[10]=mpy[9];//100
         mpx[11]=mpx[10];//550
         mpy[11]=630;
-        enemySpawner=new Thread(new Runnable() {
-            public void run() {
-                while(true)
-                {
-                    if(spawnEnemies)
-                    {
-                        e.add(new LevelEnemy(3,mpx,mpy));
-                    }
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException ex) {}
-                }
-            }
-        });
-        enemySpawner.start();
-        shb=new Button(20,50,"ShooterSpawner");
+//        enemySpawner=new Thread(new Runnable() {
+//            public void run() {
+//                while(true)
+//                {
+//                    if(spawnEnemies)
+//                    {
+//                        e.add(new LevelEnemy(3,mpx,mpy));
+//                        eSize=e.size();
+//                    }
+//                    try {
+//                        Thread.sleep(500);
+//                    } catch (InterruptedException ex) {}
+//                }
+//            }
+//        });
     }
     public void draw(Graphics g)
     {
+        if(end-start>500 && spawnEnemies)
+        {
+            start=System.currentTimeMillis();
+            e.add(new LevelEnemy(3,mpx,mpy));
+        }
+        end=System.currentTimeMillis();
         g.clearRect(0,0,panel.getWidth(),panel.getHeight());
         dp(g);
         drawEnemies(g);
@@ -72,11 +76,20 @@ public class GameManager extends Main{
         drawMenu(g);
         drawBoarder(g);
         if(DEBUG)drawWaypoints(g);
-        spawnEnemies=true;
     }
     private void drawMenu(Graphics g)
     {
-        shb.draw(g);
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(5,630,700,200);
+        
+        g.setColor(Color.LIGHT_GRAY);
+        if(x>20&&x<20+50&&y>640&&y<640+50&&mouseDown==false)g.setColor(Color.GRAY);
+        else if(x>20&&x<20+50&&y>640&&y<640+50&&mouseDown)
+        {
+            g.setColor(Color.GREEN);
+            buttonPressed("ShooterSpawner");
+        }
+        g.fillRect(20,640,50,50);
     }
     private void drawEnemies(Graphics g)
     {
@@ -99,26 +112,11 @@ public class GameManager extends Main{
     {
         try
         {
-            if(alreadySpawned&&mouseDown&&placingTower!=null)
+            if(onMouseToPlace)
             {
-                alreadySpawned=false;
-                if(placingTower.getName().equals("Shooter"))
-                {
-                    t.add(new Shooter());
-                }
-                placingTower=null;
-                System.out.println("Added");
-            }
-            else if(alreadySpawned&&placingTower!=null)
-            {
-                placingTower.setX(x);
-                placingTower.setY(y);
-                placingTower.draw(g);
-                System.out.println("Drawing PlacingTower");
-            }
-            else
-            {
-                //System.out.println("This");
+                t.get(t.size()-1).setX(x);
+                t.get(t.size()-1).setY(y);
+                if(mouseDown)onMouseToPlace=false;
             }
         }
         catch(NullPointerException ex){}
@@ -127,7 +125,7 @@ public class GameManager extends Main{
             for(int i=0;i<t.size();i++)
             {
                 t.get(i).draw(g);
-                System.out.println(i + " " + t.get(i).getX() + " " + t.get(i).getY() + " " + t.size());
+                t.get(i).exec();
             }
         }
     }
@@ -164,13 +162,50 @@ public class GameManager extends Main{
         g.fillRect(panel.getWidth()-10,0,10,panel.getHeight());
         g.fillRect(0,panel.getHeight()-10,panel.getWidth(),10);
     }
-    protected void buttonPressed(String name)
+    private void buttonPressed(String name)
     {
-        if(name.equals("ShooterSpawner")&&alreadySpawned==false)
+        if(name.equals("ShooterSpawner")&&onMouseToPlace==false)
         {
-            alreadySpawned=true;
-            placingTower=new Shooter();
             mouseDown=false;
+            t.add(new Shooter());
+            onMouseToPlace=true;
+            spawnEnemies=true;
         }
+    }
+    
+    protected Enemy getCloseBy(int rangeMod,String towerName,int x,int y)
+    {
+        Enemy closeBy=null;
+        int tX=x+25,tY=y+25;
+        if(e.size()>0)
+        for(int i=0;i<e.size();i++)
+        {
+            int tempX=e.get(i).getX()+12,tempY=e.get(i).getY()+12;
+            if(towerName.equals("Shooter"))
+            {
+                
+                if(tempX>=tX-(100+rangeMod)&&tempX<=tX+(100+rangeMod)&&tempY>=tY-(100+rangeMod)&&tempY<=tY+(100+rangeMod))
+                {
+                    closeBy=e.get(i);
+                    break;
+                }
+            }
+        }
+        return closeBy;
+    }
+    protected void killLayer(Enemy in)
+    {
+        for(int i=0;i<e.size();i++)
+        {
+            Enemy comp=e.get(i);
+            if(comp==in)
+            {
+                e.get(e.indexOf(comp)).kill();
+            }
+        }
+    }
+    protected void removeEnemy(Enemy index)
+    {
+        e.remove(index);
     }
 }

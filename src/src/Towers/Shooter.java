@@ -2,12 +2,15 @@ package src.Towers;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import src.Enemy;
+import src.GameManager;
 import src.Main;
 import src.Tower;
 
-public class Shooter implements Tower{
+public class Shooter extends GameManager implements Tower{
     private int x,y;
     private boolean hasBeenPlaced=false;
+    private long sTimeStart=System.currentTimeMillis(),sTimeEnd=System.currentTimeMillis()+1000;
     public Shooter(int inx,int iny)
     {
         x=inx;
@@ -18,21 +21,8 @@ public class Shooter implements Tower{
         this(0,0);
     }
     public void draw(Graphics g) {
-        if(hasBeenPlaced)
-        {
-            drawM(g);
-        }
-        else
-        {
-            x=Main.getMouseX();
-            y=Main.getMouseY();
-            drawM(g);
-        }
-    }
-    private void drawM(Graphics g)
-    {
-        g.setColor(Color.RED);
-        g.fillRect(x,y,10,10);
+        g.setColor(Color.darkGray);
+        g.fillRect(x,y,50,50);
     }
     public int getX() {
         return y;
@@ -58,7 +48,19 @@ public class Shooter implements Tower{
     {
         return "Shooter";
     }
+    private boolean canShoot()
+    {
+        if((sTimeEnd-sTimeStart)>500)return true;
+        else return false;
+    }
     public void exec() {
-        
+        if(canShoot())
+        {
+            Enemy target=super.getCloseBy(0, "Shooter", x, y);
+            
+            super.killLayer(target);
+            sTimeStart=System.currentTimeMillis();
+        }
+        sTimeEnd=System.currentTimeMillis();
     }
 }

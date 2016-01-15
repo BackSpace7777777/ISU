@@ -95,6 +95,14 @@ public class LevelEnemy extends GameManager implements Enemy{
     {
         return level;
     }
+    public void kill()
+    {
+        if(level==0)
+        {
+            super.removeEnemy(this);
+        }
+        else level--;
+    }
     public void exec() 
     {
         

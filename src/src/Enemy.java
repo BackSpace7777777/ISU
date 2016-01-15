@@ -10,5 +10,6 @@ public interface Enemy {
     public void setY(int i);
     public int getLevel();
     public boolean isThrough();
+    public void kill();
     public void exec();
 }
