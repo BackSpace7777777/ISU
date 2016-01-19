@@ -33,7 +33,7 @@ public class Main {
                 super.paintComponent(g);
                 gm.draw(g);
                 try {
-                    Thread.sleep(15);
+                    Thread.sleep(13);
                 } catch (InterruptedException ex) {}
                 repaint();
             }

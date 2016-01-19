@@ -107,5 +107,4 @@ public class LevelEnemy extends GameManager implements Enemy{
     {
         
     }
-    
 }

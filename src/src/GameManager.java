@@ -7,11 +7,9 @@ import src.Enemies.LevelEnemy;
 import src.Towers.Shooter;
 
 public class GameManager extends Main{
-    private int[] mpx,mpy;
+    private final int[] mpx,mpy;
     private boolean spawnEnemies=false,onMouseToPlace=false;
-    //private Thread enemySpawner;
-    public int health=100;
-    private static int eSize;
+    public static int money=500,health=200;
     private long start=System.currentTimeMillis(),end=0;
     public static ArrayManager am=new ArrayManager();
     public GameManager()
@@ -42,21 +40,6 @@ public class GameManager extends Main{
         mpy[10]=mpy[9];//100
         mpx[11]=mpx[10];//550
         mpy[11]=630;
-//        enemySpawner=new Thread(new Runnable() {
-//            public void run() {
-//                while(true)
-//                {
-//                    if(spawnEnemies)
-//                    {
-//                        e.add(new LevelEnemy(3,mpx,mpy));
-//                        eSize=e.size();
-//                    }
-//                    try {
-//                        Thread.sleep(500);
-//                    } catch (InterruptedException ex) {}
-//                }
-//            }
-//        });
     }
     public void draw(Graphics g)
     {
@@ -86,6 +69,9 @@ public class GameManager extends Main{
             buttonPressed("ShooterSpawner");
         }
         g.fillRect(20,640,50,50);
+        g.setColor(Color.WHITE);
+        g.drawString("You have " + money + " monies",(frame.getWidth()/2)-75,650);
+        g.drawString("You have " + health + " lives",(frame.getWidth()/2)-70,675);
     }
     private void drawEnemies(Graphics g)
     {
@@ -96,6 +82,7 @@ public class GameManager extends Main{
                 if(am.getE(i).isThrough())
                 {
                     am.removeE(i);
+                    health--;
                 }
                 else
                 {
@@ -162,9 +149,14 @@ public class GameManager extends Main{
     {
         if(name.equals("ShooterSpawner")&&onMouseToPlace==false)
         {
-            mouseDown=false;
-            am.tAdd(new Shooter());
-            onMouseToPlace=true;
+            
+            if(money-250>=0)
+            {
+                money-=250;
+                mouseDown=false;
+                am.tAdd(new Shooter());
+                onMouseToPlace=true;
+            }
             spawnEnemies=true;
         }
     }
@@ -194,6 +186,7 @@ public class GameManager extends Main{
             Enemy comp=am.getE(i);
             if(comp==in)
             {
+                money++;
                 am.getE(am.indexOfE(comp)).kill();
             }
         }

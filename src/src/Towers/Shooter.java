@@ -8,8 +8,8 @@ import src.Main;
 import src.Tower;
 
 public class Shooter extends GameManager implements Tower{
-    private int x,y;
-    private boolean hasBeenPlaced=false;
+    private int x,y,direction=0;
+    private boolean hasBeenPlaced=false,BeingPlaced=true;
     private long sTimeStart=System.currentTimeMillis(),sTimeEnd=System.currentTimeMillis()+1000;
     public Shooter(int inx,int iny)
     {
@@ -23,6 +23,10 @@ public class Shooter extends GameManager implements Tower{
     public void draw(Graphics g) {
         g.setColor(Color.darkGray);
         g.fillRect(x,y,50,50);
+        if(direction==0)g.fillRect(x+20,y-15,10,15);
+        else if(direction==1)g.fillRect(x+50,y+20,15,10);
+        else if(direction==2)g.fillRect(x+20,y+50,10,15);
+        else if(direction==3)g.fillRect(x-15,y+20,15,10);
     }
     public int getX() {
         return y;
@@ -36,7 +40,7 @@ public class Shooter extends GameManager implements Tower{
     }
     public void place()
     {
-        hasBeenPlaced=true;
+        BeingPlaced=false;
     }
     public void setX(int i) {
         x=i;
@@ -57,7 +61,13 @@ public class Shooter extends GameManager implements Tower{
         if(canShoot())
         {
             Enemy target=super.getCloseBy(0, "Shooter", x, y);
-            
+            try
+            {
+                if(target.getX()<x)direction=3;
+                else if(target.getY()>y)direction=2;
+                else if(target.getX()>x)direction=1;
+                else if(target.getY()<y)direction=0;
+            }catch(NullPointerException ex){}
             super.killLayer(target);
             sTimeStart=System.currentTimeMillis();
         }
