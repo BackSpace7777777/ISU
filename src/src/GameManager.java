@@ -7,18 +7,15 @@ import src.Enemies.LevelEnemy;
 import src.Towers.Shooter;
 
 public class GameManager extends Main{
-    protected ArrayList<Enemy> e;
-    protected ArrayList<Tower> t;
     private int[] mpx,mpy;
     private boolean spawnEnemies=false,onMouseToPlace=false;
     //private Thread enemySpawner;
     public int health=100;
     private static int eSize;
     private long start=System.currentTimeMillis(),end=0;
+    public static ArrayManager am=new ArrayManager();
     public GameManager()
     {
-        t=new ArrayList<>();
-        e=new ArrayList<>();
         mpx=new int[12];
         mpy=new int[12];
         mpx[0]=20;
@@ -66,7 +63,7 @@ public class GameManager extends Main{
         if(end-start>500 && spawnEnemies)
         {
             start=System.currentTimeMillis();
-            e.add(new LevelEnemy(3,mpx,mpy));
+            am.eAdd(new LevelEnemy(3,mpx,mpy));
         }
         end=System.currentTimeMillis();
         g.clearRect(0,0,panel.getWidth(),panel.getHeight());
@@ -81,7 +78,6 @@ public class GameManager extends Main{
     {
         g.setColor(Color.DARK_GRAY);
         g.fillRect(5,630,700,200);
-        
         g.setColor(Color.LIGHT_GRAY);
         if(x>20&&x<20+50&&y>640&&y<640+50&&mouseDown==false)g.setColor(Color.GRAY);
         else if(x>20&&x<20+50&&y>640&&y<640+50&&mouseDown)
@@ -93,17 +89,17 @@ public class GameManager extends Main{
     }
     private void drawEnemies(Graphics g)
     {
-        if(e.size()>0)
+        if(am.eSize()>0)
         {
-            for(int i=0;i<e.size();i++)
+            for(int i=0;i<am.eSize();i++)
             {
-                if(e.get(i).isThrough())
+                if(am.getE(i).isThrough())
                 {
-                    e.remove(i);
+                    am.removeE(i);
                 }
                 else
                 {
-                    e.get(i).draw(g);
+                    am.getE(i).draw(g);
                 }
             }
         }
@@ -114,18 +110,18 @@ public class GameManager extends Main{
         {
             if(onMouseToPlace)
             {
-                t.get(t.size()-1).setX(x);
-                t.get(t.size()-1).setY(y);
+                am.getT(am.tSize()-1).setX(x);
+                am.getT(am.tSize()-1).setY(y);
                 if(mouseDown)onMouseToPlace=false;
             }
         }
         catch(NullPointerException ex){}
-        if(t.size()>0)
+        if(am.tSize()>0)
         {
-            for(int i=0;i<t.size();i++)
+            for(int i=0;i<am.tSize();i++)
             {
-                t.get(i).draw(g);
-                t.get(i).exec();
+                am.getT(i).draw(g);
+                am.getT(i).exec();
             }
         }
     }
@@ -167,7 +163,7 @@ public class GameManager extends Main{
         if(name.equals("ShooterSpawner")&&onMouseToPlace==false)
         {
             mouseDown=false;
-            t.add(new Shooter());
+            am.tAdd(new Shooter());
             onMouseToPlace=true;
             spawnEnemies=true;
         }
@@ -176,15 +172,15 @@ public class GameManager extends Main{
     {
         Enemy closeBy=null;
         int tX=x+25,tY=y+25;
-        if(e.size()>0)
-        for(int i=0;i<e.size();i++)
+        if(am.eSize()>0)
+        for(int i=0;i<am.eSize();i++)
         {
-            int tempX=e.get(i).getX()+12,tempY=e.get(i).getY()+12;
+            int tempX=am.getE(i).getX()+12,tempY=am.getE(i).getY()+12;
             if(towerName.equals("Shooter"))
             {
                 if(tempX>=tX-(100+rangeMod)&&tempX<=tX+(100+rangeMod)&&tempY>=tY-(100+rangeMod)&&tempY<=tY+(100+rangeMod))
                 {
-                    closeBy=e.get(i);
+                    closeBy=am.getE(i);
                     break;
                 }
             }
@@ -193,17 +189,17 @@ public class GameManager extends Main{
     }
     protected void killLayer(Enemy in)
     {
-        for(int i=0;i<e.size();i++)
+        for(int i=0;i<am.eSize();i++)
         {
-            Enemy comp=e.get(i);
+            Enemy comp=am.getE(i);
             if(comp==in)
             {
-                e.get(e.indexOf(comp)).kill();
+                am.getE(am.indexOfE(comp)).kill();
             }
         }
     }
     protected void removeEnemy(Enemy index)
     {
-        e.remove(index);
+        am.removeE(index);
     }
 }
