@@ -3,17 +3,25 @@ package src;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Random;
 import src.Enemies.LevelEnemy;
 import src.Towers.Shooter;
 
 public class GameManager extends Main{
     private final int[] mpx,mpy;
-    private boolean spawnEnemies=false,onMouseToPlace=false;
+    private boolean spawnEnemies=false,onMouseToPlace=false,noMoreTime=false;
     public static int money=500,health=200;
-    private long start=System.currentTimeMillis(),end=0;
+    private long start=System.currentTimeMillis(),end=0,waveTimeStart=System.currentTimeMillis(),waveTimeNow;
+    private long[] waves=new long[5];
     public static ArrayManager am=new ArrayManager();
     public GameManager()
     {
+        Random r=new Random();
+        waves[0]=r.nextInt(10000)+20000;
+        waves[1]=r.nextInt(20000)+50000;
+        waves[2]=r.nextInt(20000)+100000;
+        waves[3]=r.nextInt(20000)+200000;
+        waves[4]=r.nextInt(20000)+300000;
         mpx=new int[12];
         mpy=new int[12];
         mpx[0]=20;
@@ -43,12 +51,7 @@ public class GameManager extends Main{
     }
     public void draw(Graphics g)
     {
-        if(end-start>500 && spawnEnemies)
-        {
-            start=System.currentTimeMillis();
-            am.eAdd(new LevelEnemy(3,mpx,mpy));
-        }
-        end=System.currentTimeMillis();
+        addingEnemies();
         g.clearRect(0,0,panel.getWidth(),panel.getHeight());
         dp(g);
         drawEnemies(g);
@@ -56,6 +59,67 @@ public class GameManager extends Main{
         drawMenu(g);
         drawBoarder(g);
         if(DEBUG)drawWaypoints(g);
+    }
+    private void addingEnemies()
+    {
+        if(spawnEnemies && noMoreTime)
+        {
+            if(waveTimeNow-waveTimeStart<waves[0])
+            {
+                if(end-start>750)
+                {
+                    start=System.currentTimeMillis();
+                    am.eAdd(new LevelEnemy(2,mpx,mpy));
+                }
+            }
+            else if(waveTimeNow-waveTimeStart<waves[1])
+            {
+                if(end-start>500)
+                {
+                    start=System.currentTimeMillis();
+                    am.eAdd(new LevelEnemy(2,mpx,mpy));
+                }
+            }
+            else if(waveTimeNow-waveTimeStart<waves[2])
+            {
+                if(end-start>450)
+                {
+                    start=System.currentTimeMillis();
+                    am.eAdd(new LevelEnemy(3,mpx,mpy));
+                }
+            }
+            else if(waveTimeNow-waveTimeStart<waves[3])
+            {
+                if(end-start>400)
+                {
+                    start=System.currentTimeMillis();
+                    am.eAdd(new LevelEnemy(4,mpx,mpy));
+                }
+            }
+            else if(waveTimeNow-waveTimeStart<waves[4])
+            {
+                if(end-start>300)
+                {
+                    start=System.currentTimeMillis();
+                    am.eAdd(new LevelEnemy(5,mpx,mpy));
+                }
+            }
+            else
+            {
+                noMoreTime=true;
+            }
+            if(noMoreTime)
+            {
+                if(end-start>150)
+                {
+                    start=System.currentTimeMillis();
+                    am.eAdd(new LevelEnemy(5,mpx,mpy));
+                }
+            }
+            waveTimeNow=System.currentTimeMillis();
+            end=System.currentTimeMillis();
+        }
+        System.out.println(waveTimeNow-waveTimeStart);
     }
     private void drawMenu(Graphics g)
     {
@@ -149,10 +213,9 @@ public class GameManager extends Main{
     {
         if(name.equals("ShooterSpawner")&&onMouseToPlace==false)
         {
-            
-            if(money-250>=0)
+            if(money-200>=0)
             {
-                money-=250;
+                money-=200;
                 mouseDown=false;
                 am.tAdd(new Shooter());
                 onMouseToPlace=true;

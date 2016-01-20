@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import src.Enemy;
 import src.GameManager;
-import src.Main;
 import src.Tower;
 
 public class Shooter extends GameManager implements Tower{
