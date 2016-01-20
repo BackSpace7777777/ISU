@@ -49,7 +49,7 @@ public class LevelEnemy extends GameManager implements Enemy{
         else if(level==5)
         {
             g.setColor(Color.ORANGE);
-            speed=3;
+            speed=5;
         }
         g.fillRect(x,y,25,25);
         if(x==xTargets[arrayPos] && y==yTargets[arrayPos])

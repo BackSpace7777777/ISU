@@ -62,7 +62,7 @@ public class GameManager extends Main{
     }
     private void addingEnemies()
     {
-        if(spawnEnemies && noMoreTime)
+        if(spawnEnemies && noMoreTime==false)
         {
             if(waveTimeNow-waveTimeStart<waves[0])
             {
@@ -108,17 +108,20 @@ public class GameManager extends Main{
             {
                 noMoreTime=true;
             }
-            if(noMoreTime)
+            waveTimeNow=System.currentTimeMillis();
+            end=System.currentTimeMillis();
+        }
+        if(noMoreTime)
+        {
+            if(end-start>150)
             {
-                if(end-start>150)
-                {
-                    start=System.currentTimeMillis();
-                    am.eAdd(new LevelEnemy(5,mpx,mpy));
-                }
+                start=System.currentTimeMillis();
+                am.eAdd(new LevelEnemy(5,mpx,mpy));
             }
             waveTimeNow=System.currentTimeMillis();
             end=System.currentTimeMillis();
         }
+        
         System.out.println(waveTimeNow-waveTimeStart);
     }
     private void drawMenu(Graphics g)
