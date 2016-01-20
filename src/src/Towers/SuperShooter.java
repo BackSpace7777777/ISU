@@ -7,21 +7,21 @@ import src.Enemy;
 import src.GameManager;
 import src.Tower;
 
-public class Shooter extends GameManager implements Tower{
+public class SuperShooter extends GameManager implements Tower{
     private int x,y,direction=0;
     private boolean hasBeenPlaced=false,BeingPlaced=true;
     private long sTimeStart=System.currentTimeMillis(),sTimeEnd=System.currentTimeMillis()+1000;
-    public Shooter(int inx,int iny)
+    public SuperShooter(int inx,int iny)
     {
         x=inx;
         y=iny;
     }
-    public Shooter()
+    public SuperShooter()
     {
         this(0,0);
     }
     public void draw(Graphics g) {
-        g.setColor(Color.DARK_GRAY);
+        g.setColor(Color.LIGHT_GRAY);
         g.fillRect(x,y,50,50);
         if(direction==0)g.fillRect(x+20,y-15,10,15);
         else if(direction==1)g.fillRect(x+50,y+20,15,10);
@@ -50,17 +50,17 @@ public class Shooter extends GameManager implements Tower{
     }
     public String getName()
     {
-        return "Shooter";
+        return "SuperShooter";
     }
     private boolean canShoot()
     {
-        if((sTimeEnd-sTimeStart)>500)return true;
+        if((sTimeEnd-sTimeStart)>150)return true;
         else return false;
     }
     public void exec() {
         if(canShoot())
         {
-            Enemy target=super.getCloseBy(0, "Shooter", x, y);
+            Enemy target=super.getCloseBy(0, "SuperShooter", x, y);
             try
             {
                 if(target.getX()<x)direction=3;

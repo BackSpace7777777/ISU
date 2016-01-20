@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Random;
+import src.Enemies.HeavyEnemy;
 import src.Enemies.LevelEnemy;
 import src.Towers.Shooter;
+import src.Towers.SuperShooter;
 
 public class GameManager extends Main{
     private final int[] mpx,mpy;
@@ -69,7 +71,8 @@ public class GameManager extends Main{
                 if(end-start>750)
                 {
                     start=System.currentTimeMillis();
-                    am.eAdd(new LevelEnemy(2,mpx,mpy));
+//                    am.eAdd(new LevelEnemy(2,mpx,mpy));
+                    am.eAdd(new HeavyEnemy(mpx,mpy));
                 }
             }
             else if(waveTimeNow-waveTimeStart<waves[1])
@@ -113,7 +116,7 @@ public class GameManager extends Main{
         }
         if(noMoreTime)
         {
-            if(end-start>150)
+            if(end-start>100)
             {
                 start=System.currentTimeMillis();
                 am.eAdd(new LevelEnemy(5,mpx,mpy));
@@ -136,9 +139,23 @@ public class GameManager extends Main{
             buttonPressed("ShooterSpawner");
         }
         g.fillRect(20,640,50,50);
+        g.setColor(Color.LIGHT_GRAY);
+        if(x>20&&x<20+50&&y>700&&y<700+50&&mouseDown==false)g.setColor(Color.GRAY);
+        else if(x>20&&x<20+50&&y>700&&y<700+50&&mouseDown)
+        {
+            g.setColor(Color.GREEN);
+            buttonPressed("SuperShooterSpawned");
+        }
+        g.fillRect(20,700,50,50);
         g.setColor(Color.WHITE);
         g.drawString("You have " + money + " monies",(frame.getWidth()/2)-75,650);
         g.drawString("You have " + health + " lives",(frame.getWidth()/2)-70,675);
+        g.setColor(Color.BLACK);
+        g.drawString("Shooter",22,658);
+        g.drawString("$200",24,670);
+        g.drawString("Super",22,717);
+        g.drawString("Shooter",22,730);
+        g.drawString("$1000",22,742);
     }
     private void drawEnemies(Graphics g)
     {
@@ -225,6 +242,17 @@ public class GameManager extends Main{
             }
             spawnEnemies=true;
         }
+        else if(name.equals("SuperShooterSpawned")&&onMouseToPlace==false)
+        {
+            if(money-1000>=0)
+            {
+                money-=1000;
+                mouseDown=false;
+                am.tAdd(new SuperShooter());
+                onMouseToPlace=true;
+            }
+            spawnEnemies=true;
+        }
     }
     protected Enemy getCloseBy(int rangeMod,String towerName,int x,int y)
     {
@@ -237,6 +265,14 @@ public class GameManager extends Main{
             if(towerName.equals("Shooter"))
             {
                 if(tempX>=tX-(100+rangeMod)&&tempX<=tX+(100+rangeMod)&&tempY>=tY-(100+rangeMod)&&tempY<=tY+(100+rangeMod))
+                {
+                    closeBy=am.getE(i);
+                    break;
+                }
+            }
+            else if(towerName.equals("SuperShooter"))
+            {
+                if(tempX>=tX-(250+rangeMod)&&tempX<=tX+(250+rangeMod)&&tempY>=tY-(250+rangeMod)&&tempY<=tY+(250+rangeMod))
                 {
                     closeBy=am.getE(i);
                     break;
