@@ -54,7 +54,7 @@ public class SuperShooter extends GameManager implements Tower{
     }
     private boolean canShoot()
     {
-        if((sTimeEnd-sTimeStart)>150)return true;
+        if((sTimeEnd-sTimeStart)>100)return true;
         else return false;
     }
     public void exec() {

@@ -17,11 +17,12 @@ public class HeavyEnemy extends GameManager implements Enemy{
         x=xTargets[0];
         y=yTargets[0];
         this.level=255;
+        speed=1;
         isAlive=true;
     }
     public void draw(Graphics g) 
     {
-        g.setColor(new Color(level,150,150));
+        g.setColor(new Color(level,150,255));
         g.fillRect(x,y,25,25);
         if(x==xTargets[arrayPos] && y==yTargets[arrayPos])
         {

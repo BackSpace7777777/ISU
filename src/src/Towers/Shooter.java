@@ -54,7 +54,7 @@ public class Shooter extends GameManager implements Tower{
     }
     private boolean canShoot()
     {
-        if((sTimeEnd-sTimeStart)>500)return true;
+        if((sTimeEnd-sTimeStart)>450)return true;
         else return false;
     }
     public void exec() {

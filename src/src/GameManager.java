@@ -13,7 +13,7 @@ public class GameManager extends Main{
     private final int[] mpx,mpy;
     private boolean spawnEnemies=false,onMouseToPlace=false,noMoreTime=false;
     public static int money=500,health=200;
-    private long start=System.currentTimeMillis(),end=0,waveTimeStart=System.currentTimeMillis(),waveTimeNow;
+    private long start=System.currentTimeMillis(),end=0,hstart=start,hend=0,waveTimeStart=System.currentTimeMillis(),waveTimeNow;
     private long[] waves=new long[5];
     public static ArrayManager am=new ArrayManager();
     public GameManager()
@@ -71,8 +71,7 @@ public class GameManager extends Main{
                 if(end-start>750)
                 {
                     start=System.currentTimeMillis();
-//                    am.eAdd(new LevelEnemy(2,mpx,mpy));
-                    am.eAdd(new HeavyEnemy(mpx,mpy));
+                    am.eAdd(new LevelEnemy(2,mpx,mpy));
                 }
             }
             else if(waveTimeNow-waveTimeStart<waves[1])
@@ -106,6 +105,11 @@ public class GameManager extends Main{
                     start=System.currentTimeMillis();
                     am.eAdd(new LevelEnemy(5,mpx,mpy));
                 }
+                if(hend-hstart>8000)
+                {
+                    hstart=System.currentTimeMillis();
+                    am.eAdd(new HeavyEnemy(mpx,mpy));
+                }
             }
             else
             {
@@ -121,8 +125,14 @@ public class GameManager extends Main{
                 start=System.currentTimeMillis();
                 am.eAdd(new LevelEnemy(5,mpx,mpy));
             }
+            if(hend-hstart>2000)
+            {
+                hstart=System.currentTimeMillis();
+                am.eAdd(new HeavyEnemy(mpx,mpy));
+            }
             waveTimeNow=System.currentTimeMillis();
             end=System.currentTimeMillis();
+            hend=end;
         }
         
         System.out.println(waveTimeNow-waveTimeStart);
