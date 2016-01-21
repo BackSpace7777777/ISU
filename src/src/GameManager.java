@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import src.Enemies.HeavyEnemy;
 import src.Enemies.LevelEnemy;
+import src.Towers.Explosive;
 import src.Towers.Shooter;
 import src.Towers.SuperShooter;
 
@@ -105,7 +106,7 @@ public class GameManager extends Main{
                     start=System.currentTimeMillis();
                     am.eAdd(new LevelEnemy(5,mpx,mpy));
                 }
-                if(hend-hstart>8000)
+                if(hend-hstart>13000)
                 {
                     hstart=System.currentTimeMillis();
                     am.eAdd(new HeavyEnemy(mpx,mpy));
@@ -125,7 +126,7 @@ public class GameManager extends Main{
                 start=System.currentTimeMillis();
                 am.eAdd(new LevelEnemy(5,mpx,mpy));
             }
-            if(hend-hstart>2000)
+            if(hend-hstart>7000)
             {
                 hstart=System.currentTimeMillis();
                 am.eAdd(new HeavyEnemy(mpx,mpy));
@@ -134,8 +135,6 @@ public class GameManager extends Main{
             end=System.currentTimeMillis();
             hend=end;
         }
-        
-        System.out.println(waveTimeNow-waveTimeStart);
     }
     private void drawMenu(Graphics g)
     {
@@ -157,6 +156,14 @@ public class GameManager extends Main{
             buttonPressed("SuperShooterSpawned");
         }
         g.fillRect(20,700,50,50);
+        g.setColor(Color.LIGHT_GRAY);
+        if(x>80&&x<80+50&&y>640&&y<640+50&&mouseDown==false)g.setColor(Color.GRAY);
+        else if(x>80&&x<80+50&&y>640&&y<640+50&&mouseDown)
+        {
+            g.setColor(Color.GREEN);
+            buttonPressed("ExplosiveSpawned");
+        }
+        g.fillRect(80,640,50,50);
         g.setColor(Color.WHITE);
         g.drawString("You have " + money + " monies",(frame.getWidth()/2)-75,650);
         g.drawString("You have " + health + " lives",(frame.getWidth()/2)-70,675);
@@ -166,6 +173,8 @@ public class GameManager extends Main{
         g.drawString("Super",22,717);
         g.drawString("Shooter",22,730);
         g.drawString("$1000",22,742);
+        g.drawString("Explosive",80,658);
+        g.drawString("$750",82,670);
     }
     private void drawEnemies(Graphics g)
     {
@@ -263,6 +272,17 @@ public class GameManager extends Main{
             }
             spawnEnemies=true;
         }
+        else if(name.equals("ExplosiveSpawned")&&onMouseToPlace==false)
+        {
+            if(money-50>=0)
+            {
+                money-=50;
+                mouseDown=false;
+                am.tAdd(new Explosive());
+                onMouseToPlace=true;
+            }
+            spawnEnemies=true;
+        }
     }
     protected Enemy getCloseBy(int rangeMod,String towerName,int x,int y)
     {
@@ -288,8 +308,35 @@ public class GameManager extends Main{
                     break;
                 }
             }
+            else if((towerName.equals("Explosive")))
+            {
+                if(tempX>=tX-(250+rangeMod)&&tempX<=tX+(250+rangeMod)&&tempY>=tY-(250+rangeMod)&&tempY<=tY+(250+rangeMod))
+                {
+                    closeBy=am.getE(i);
+                    break;
+                }
+            }
         }
         return closeBy;
+    }
+    protected Enemy[] splash(int rad,int x,int y)
+    {
+        Enemy[] inside;
+        ArrayList<Enemy> alist=new ArrayList<>();
+        for(int i=0;i<am.eSize();i++)
+        {
+            Enemy temp=am.getE(i);
+            if(temp.getX()>(x-rad)&&temp.getX()<(x+rad)&&temp.getY()>(y-rad)&&temp.getY()<(y+rad))
+            {
+                alist.add(temp);
+            }
+        }
+        inside=new Enemy[alist.size()];
+        for(int i=0;i<alist.size();i++)
+        {
+            inside[i]=alist.get(i);
+        }
+        return inside;
     }
     protected void killLayer(Enemy in)
     {

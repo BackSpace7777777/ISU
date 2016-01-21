@@ -16,7 +16,7 @@ public class HeavyEnemy extends GameManager implements Enemy{
         yTargets=ytarg;
         x=xTargets[0];
         y=yTargets[0];
-        this.level=255;
+        this.level=100;
         speed=1;
         isAlive=true;
     }

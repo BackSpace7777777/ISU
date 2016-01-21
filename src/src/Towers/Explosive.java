@@ -7,21 +7,21 @@ import src.Enemy;
 import src.GameManager;
 import src.Tower;
 
-public class SuperShooter extends GameManager implements Tower{
+public class Explosive extends GameManager implements Tower{
     private int x,y,direction=0;
     private boolean hasBeenPlaced=false,BeingPlaced=true;
     private long sTimeStart=System.currentTimeMillis(),sTimeEnd=System.currentTimeMillis()+1000;
-    public SuperShooter(int inx,int iny)
+    public Explosive(int inx,int iny)
     {
         x=inx;
         y=iny;
     }
-    public SuperShooter()
+    public Explosive()
     {
         this(0,0);
     }
     public void draw(Graphics g) {
-        g.setColor(Color.LIGHT_GRAY);
+        g.setColor(Color.RED);
         g.fillRect(x,y,50,50);
         if(direction==0)g.fillRect(x+20,y-15,10,15);
         else if(direction==1)g.fillRect(x+50,y+20,15,10);
@@ -50,25 +50,32 @@ public class SuperShooter extends GameManager implements Tower{
     }
     public String getName()
     {
-        return "SuperShooter";
+        return "Explosive";
     }
     private boolean canShoot()
     {
-        if((sTimeEnd-sTimeStart)>75)return true;
+        if((sTimeEnd-sTimeStart)>800)return true;
         else return false;
     }
     public void exec() {
         if(canShoot())
         {
-            Enemy target=super.getCloseBy(0, "SuperShooter", x, y);
+            Enemy target=super.getCloseBy(-50, "Explosive", x, y);
+            Enemy[] targets;
             try
             {
                 if(target.getX()<x)direction=3;
                 else if(target.getY()>y)direction=2;
                 else if(target.getX()>x)direction=1;
                 else if(target.getY()<y)direction=0;
+                Random r=new Random();
+                targets=super.splash((r.nextInt(75)+75),target.getX(),target.getY());
+                for(int i=0;i<targets.length;i++)
+                {
+                    super.killLayer(targets[i]);
+                }
             }catch(NullPointerException ex){}
-            super.killLayer(target);
+            
             sTimeStart=System.currentTimeMillis();
         }
         sTimeEnd=System.currentTimeMillis();
