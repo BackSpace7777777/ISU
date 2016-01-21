@@ -263,9 +263,9 @@ public class GameManager extends Main{
         }
         else if(name.equals("SuperShooterSpawned")&&onMouseToPlace==false)
         {
-            if(money-1000>=0)
+            if(money-1250>=0)
             {
-                money-=1000;
+                money-=1250;
                 mouseDown=false;
                 am.tAdd(new SuperShooter());
                 onMouseToPlace=true;
@@ -274,9 +274,9 @@ public class GameManager extends Main{
         }
         else if(name.equals("ExplosiveSpawned")&&onMouseToPlace==false)
         {
-            if(money-50>=0)
+            if(money-850>=0)
             {
-                money-=50;
+                money-=850;
                 mouseDown=false;
                 am.tAdd(new Explosive());
                 onMouseToPlace=true;
