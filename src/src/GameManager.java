@@ -169,12 +169,12 @@ public class GameManager extends Main{
         g.drawString("You have " + health + " lives",(frame.getWidth()/2)-70,675);
         g.setColor(Color.BLACK);
         g.drawString("Shooter",22,658);
-        g.drawString("$200",24,670);
+        g.drawString("$175",24,670);
         g.drawString("Super",22,717);
         g.drawString("Shooter",22,730);
-        g.drawString("$1000",22,742);
+        g.drawString("$1250",22,742);
         g.drawString("Explosive",80,658);
-        g.drawString("$750",82,670);
+        g.drawString("$850",82,670);
     }
     private void drawEnemies(Graphics g)
     {
@@ -252,9 +252,9 @@ public class GameManager extends Main{
     {
         if(name.equals("ShooterSpawner")&&onMouseToPlace==false)
         {
-            if(money-200>=0)
+            if(money-175>=0)
             {
-                money-=200;
+                money-=175;
                 mouseDown=false;
                 am.tAdd(new Shooter());
                 onMouseToPlace=true;
