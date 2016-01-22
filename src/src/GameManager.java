@@ -15,16 +15,22 @@ public class GameManager extends Main{
     private boolean spawnEnemies=false,onMouseToPlace=false,noMoreTime=false;
     public static int money=500,health=200;
     private long start=System.currentTimeMillis(),end=0,hstart=start,hend=0,waveTimeStart=System.currentTimeMillis(),waveTimeNow;
-    private long[] waves=new long[5];
+    private long[] waves=new long[6];
     public static ArrayManager am=new ArrayManager();
     public GameManager()
     {
         Random r=new Random();
+        //Time for each wave to add some randomness
+        /*-------*/
         waves[0]=r.nextInt(10000)+20000;
         waves[1]=r.nextInt(20000)+50000;
         waves[2]=r.nextInt(20000)+100000;
         waves[3]=r.nextInt(20000)+200000;
         waves[4]=r.nextInt(20000)+300000;
+        waves[5]=r.nextInt(20000)+500000;
+        /*----------*/
+        //Map Coords
+        /*-----------*/
         mpx=new int[12];
         mpy=new int[12];
         mpx[0]=20;
@@ -51,9 +57,12 @@ public class GameManager extends Main{
         mpy[10]=mpy[9];//100
         mpx[11]=mpx[10];//550
         mpy[11]=630;
+        //End of map Coords
+        /*-----------*/
     }
     public void draw(Graphics g)
     {
+        //Paint draw method of the game manager that gets called by the main class
         addingEnemies();
         g.clearRect(0,0,panel.getWidth(),panel.getHeight());
         dp(g);
@@ -112,6 +121,19 @@ public class GameManager extends Main{
                     am.eAdd(new HeavyEnemy(mpx,mpy));
                 }
             }
+            else if(waveTimeNow-waveTimeStart<waves[5])
+            {
+                if(end-start>100)
+                {
+                    start=System.currentTimeMillis();
+                    am.eAdd(new LevelEnemy(5,mpx,mpy));
+                }
+                if(hend-hstart>5000)
+                {
+                    hstart=System.currentTimeMillis();
+                    am.eAdd(new HeavyEnemy(mpx,mpy));
+                }
+            }
             else
             {
                 noMoreTime=true;
@@ -121,12 +143,12 @@ public class GameManager extends Main{
         }
         if(noMoreTime)
         {
-            if(end-start>100)
+            if(end-start>25)
             {
                 start=System.currentTimeMillis();
                 am.eAdd(new LevelEnemy(5,mpx,mpy));
             }
-            if(hend-hstart>7000)
+            if(hend-hstart>1000)
             {
                 hstart=System.currentTimeMillis();
                 am.eAdd(new HeavyEnemy(mpx,mpy));
@@ -174,7 +196,8 @@ public class GameManager extends Main{
         g.drawString("Shooter",22,730);
         g.drawString("$1250",22,742);
         g.drawString("Explosive",80,658);
-        g.drawString("$850",82,670);
+        g.drawString("Tower",82,670);
+        g.drawString("$850",82,681);
     }
     private void drawEnemies(Graphics g)
     {
