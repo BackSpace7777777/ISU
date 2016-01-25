@@ -13,12 +13,14 @@ import src.Towers.SuperShooter;
 public class GameManager extends Main{
     private final int[] mpx,mpy;
     private boolean spawnEnemies=false,onMouseToPlace=false,noMoreTime=false;
-    public static int money=500,health=200;
+    public static int money=500,health=1;
     private long start=System.currentTimeMillis(),end=0,hstart=start,hend=0,waveTimeStart=System.currentTimeMillis(),waveTimeNow;
     private long[] waves=new long[6];
     public static ArrayManager am=new ArrayManager();
+    private static long killed=0,started,ended;
     public GameManager()
     {
+        started=System.currentTimeMillis();
         Random r=new Random();
         //Time for each wave to add some randomness
         /*-------*/
@@ -63,25 +65,39 @@ public class GameManager extends Main{
     public void draw(Graphics g)
     {
         //Paint draw method of the game manager that gets called by the main class
-        addingEnemies();
-        g.clearRect(0,0,panel.getWidth(),panel.getHeight());
-        dp(g);
-        drawEnemies(g);
-        drawTowers(g);
-        drawMenu(g);
-        drawBoarder(g);
-        if(DEBUG)drawWaypoints(g);
+        ended=System.currentTimeMillis();//Setting the ending time so that it tells you how long you have played
+        addingEnemies();//Checks to see if it needs to add enemies
+        g.clearRect(0,0,panel.getWidth(),panel.getHeight());//Clears the screen
+        dp(g);//Draws the blue path
+        drawEnemies(g);//Draws the enemies and runs the enemy logic
+        drawTowers(g);//Draws the Towers and runs the logic
+        drawMenu(g);//Draws menu where the buttons and information is
+        drawBoarder(g);//Draws the black border at the edges
+        if(DEBUG)drawWaypoints(g);//For debuging purposes
+    }
+    public boolean isAliveTotal()//Checking health for the main class
+    {
+        if(health<=0)return false;
+        else return true;
+    }
+    public long timeLasted()//Getting the time that player lasted
+    {
+        return ended-started;
+    }
+    public long getNumberKilled()//Getting number of kills
+    {
+        return killed;
     }
     private void addingEnemies()
     {
         if(spawnEnemies && noMoreTime==false)
-        {
+        {//Checks what wave it is based on the values that were generated in the constructor
             if(waveTimeNow-waveTimeStart<waves[0])
             {
-                if(end-start>750)
+                if(end-start>750)//Checks the time and if the difference is 750 or greater is spawns one
                 {
-                    start=System.currentTimeMillis();
-                    am.eAdd(new LevelEnemy(2,mpx,mpy));
+                    start=System.currentTimeMillis();//Sets the time to now so that the difference is 0 again
+                    am.eAdd(new LevelEnemy(2,mpx,mpy));//Adds one to the array manager
                 }
             }
             else if(waveTimeNow-waveTimeStart<waves[1])
@@ -141,7 +157,7 @@ public class GameManager extends Main{
             waveTimeNow=System.currentTimeMillis();
             end=System.currentTimeMillis();
         }
-        if(noMoreTime)
+        if(noMoreTime)//If there are no more values in the array it goes to this because there are no more preset waves
         {
             if(end-start>25)
             {
@@ -161,13 +177,13 @@ public class GameManager extends Main{
     private void drawMenu(Graphics g)
     {
         g.setColor(Color.DARK_GRAY);
-        g.fillRect(5,630,700,200);
+        g.fillRect(5,630,700,200);//Draws the grey rectange at the bottem
         g.setColor(Color.LIGHT_GRAY);
-        if(x>20&&x<20+50&&y>640&&y<640+50&&mouseDown==false)g.setColor(Color.GRAY);
-        else if(x>20&&x<20+50&&y>640&&y<640+50&&mouseDown)
+        if(x>20&&x<20+50&&y>640&&y<640+50&&mouseDown==false)g.setColor(Color.GRAY);//Checks for the mouse position
+        else if(x>20&&x<20+50&&y>640&&y<640+50&&mouseDown)//Checks if the mouse is clicked
         {
             g.setColor(Color.GREEN);
-            buttonPressed("ShooterSpawner");
+            buttonPressed("ShooterSpawner");//Button logic method call
         }
         g.fillRect(20,640,50,50);
         g.setColor(Color.LIGHT_GRAY);
@@ -186,10 +202,10 @@ public class GameManager extends Main{
             buttonPressed("ExplosiveSpawned");
         }
         g.fillRect(80,640,50,50);
-        g.setColor(Color.WHITE);
+        g.setColor(Color.WHITE);//Information text like lives and money
         g.drawString("You have " + money + " monies",(frame.getWidth()/2)-75,650);
         g.drawString("You have " + health + " lives",(frame.getWidth()/2)-70,675);
-        g.setColor(Color.BLACK);
+        g.setColor(Color.BLACK);//Button text
         g.drawString("Shooter",22,658);
         g.drawString("$175",24,670);
         g.drawString("Super",22,717);
@@ -205,7 +221,7 @@ public class GameManager extends Main{
         {
             for(int i=0;i<am.eSize();i++)
             {
-                if(am.getE(i).isThrough())
+                if(am.getE(i).isThrough())//Checks if enemy is at the end
                 {
                     am.removeE(i);
                     health--;
@@ -221,7 +237,7 @@ public class GameManager extends Main{
     {
         try
         {
-            if(onMouseToPlace)
+            if(onMouseToPlace)//Ifor when you press one of the buttons it follows your mouse until you press it again
             {
                 am.getT(am.tSize()-1).setX(x);
                 am.getT(am.tSize()-1).setY(y);
@@ -233,7 +249,7 @@ public class GameManager extends Main{
         {
             for(int i=0;i<am.tSize();i++)
             {
-                am.getT(i).draw(g);
+                am.getT(i).draw(g);//Draws then runs the tower logic
                 am.getT(i).exec();
             }
         }
@@ -253,7 +269,7 @@ public class GameManager extends Main{
         g.fillRect(mpx[9],mpy[9],mpx[10]-mpx[9],25);//9-10
         g.fillRect(mpx[10],mpy[10],25,mpy[11]-mpy[10]);//10-11
     }
-    private void drawWaypoints(Graphics g)
+    private void drawWaypoints(Graphics g)//Debug
     {
         for(int i=0;i<mpx.length;i++)
         {
@@ -263,7 +279,7 @@ public class GameManager extends Main{
             g.drawString("Point " + i,mpx[i],mpy[i]);
         }
     }
-    private void drawBoarder(Graphics g)
+    private void drawBoarder(Graphics g)//Draws the border
     {
         g.setColor(Color.BLACK);
         g.fillRect(0,0,10,panel.getHeight());
@@ -275,7 +291,7 @@ public class GameManager extends Main{
     {
         if(name.equals("ShooterSpawner")&&onMouseToPlace==false)
         {
-            if(money-175>=0)
+            if(money-175>=0)//Checks if you have money before it takes it away
             {
                 money-=175;
                 mouseDown=false;
@@ -307,19 +323,19 @@ public class GameManager extends Main{
             spawnEnemies=true;
         }
     }
-    protected Enemy getCloseBy(int rangeMod,String towerName,int x,int y)
-    {
-        Enemy closeBy=null;
+    protected Enemy getCloseBy(int rangeMod,String towerName,int x,int y)//For Tower logic
+    {//Gets the enemy in range and at the front most position of the array
+        Enemy closeBy=null;//Target that gets returned
         int tX=x+25,tY=y+25;
         if(am.eSize()>0)
         for(int i=0;i<am.eSize();i++)
         {
             int tempX=am.getE(i).getX()+12,tempY=am.getE(i).getY()+12;
-            if(towerName.equals("Shooter"))
+            if(towerName.equals("Shooter"))//Checking what tower it is
             {
                 if(tempX>=tX-(100+rangeMod)&&tempX<=tX+(100+rangeMod)&&tempY>=tY-(100+rangeMod)&&tempY<=tY+(100+rangeMod))
                 {
-                    closeBy=am.getE(i);
+                    closeBy=am.getE(i);//sets the target as this
                     break;
                 }
             }
@@ -342,34 +358,35 @@ public class GameManager extends Main{
         }
         return closeBy;
     }
-    protected Enemy[] splash(int rad,int x,int y)
-    {
-        Enemy[] inside;
-        ArrayList<Enemy> alist=new ArrayList<>();
+    protected Enemy[] splash(int rad,int x,int y)//Used only by the explosive tower
+    {//Used to get whats in a radius
+        Enemy[] inside;//The return array
+        ArrayList<Enemy> alist=new ArrayList<>();//Temp arraylist used for collecting
         for(int i=0;i<am.eSize();i++)
         {
             Enemy temp=am.getE(i);
-            if(temp.getX()>(x-rad)&&temp.getX()<(x+rad)&&temp.getY()>(y-rad)&&temp.getY()<(y+rad))
+            if(temp.getX()>(x-rad)&&temp.getX()<(x+rad)&&temp.getY()>(y-rad)&&temp.getY()<(y+rad))//Checks if enemy is in radius
             {
                 alist.add(temp);
             }
         }
-        inside=new Enemy[alist.size()];
+        inside=new Enemy[alist.size()];//Defines the return array as the same size as the collecting arraylist
         for(int i=0;i<alist.size();i++)
         {
-            inside[i]=alist.get(i);
+            inside[i]=alist.get(i);//inserts the array of enemies to be returned
         }
         return inside;
     }
-    protected void killLayer(Enemy in)
+    protected void killLayer(Enemy in)//Used by the towers to remove a layer
     {
         for(int i=0;i<am.eSize();i++)
         {
-            Enemy comp=am.getE(i);
+            Enemy comp=am.getE(i);//Temp enemy to compare to the others
             if(comp==in)
             {
                 money++;
-                am.getE(am.indexOfE(comp)).kill();
+                killed++;
+                am.getE(am.indexOfE(comp)).kill();//Removes layer
             }
         }
     }

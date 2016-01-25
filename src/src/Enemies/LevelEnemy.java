@@ -21,7 +21,7 @@ public class LevelEnemy extends GameManager implements Enemy{
     }
     public void draw(Graphics g) 
     {
-        if(level==0)
+        if(level==0)//Checks what the layer is and sets speed and colour acordingly
         {
             g.setColor(Color.RED);
             speed=1;
