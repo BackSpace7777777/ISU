@@ -21,7 +21,6 @@ public class GameManager extends Main{
     private static long killed=0,started,ended;
     public GameManager()
     {
-        started=System.currentTimeMillis();
         Random r=new Random();
         //Time for each wave to add some randomness
         /*-------*/
@@ -66,7 +65,7 @@ public class GameManager extends Main{
     public void draw(Graphics g)
     {
         //Paint draw method of the game manager that gets called by the main class
-        ended=System.currentTimeMillis();//Setting the ending time so that it tells you how long you have played
+        ended=System.currentTimeMillis();
         addingEnemies();//Checks to see if it needs to add enemies
         g.clearRect(0,0,panel.getWidth(),panel.getHeight());//Clears the screen
         dp(g);//Draws the blue path
@@ -78,16 +77,16 @@ public class GameManager extends Main{
     }
     public boolean isAliveTotal()//Checking health for the main class
     {
-        if(health<=0)
-        {
-            ended=System.currentTimeMillis();
-            return false;
-        }
+        if(health<=0)return false;
         else return true;
+    }
+    public void startTime()
+    {
+        started=System.currentTimeMillis();
     }
     public long timeLasted()//Getting the time that player lasted
     {
-        return ended-started;
+        return (ended-started)/1000;
     }
     public long getNumberKilled()//Getting number of kills
     {

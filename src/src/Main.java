@@ -26,6 +26,7 @@ public class Main {
         frame.setDefaultCloseOperation(3);
         //=======================================================
         gm=new GameManager();
+        gm.startTime();
         panel=new JPanel()
         {
             public void paintComponent(Graphics g)//This is where everything gets called around 75 frames per second
@@ -35,6 +36,7 @@ public class Main {
                     gm.draw(g);//Draws everything
                 else
                     loss(g);//Draws the information at the end screen
+                System.out.println(gm.timeLasted());
                 try {
                     Thread.sleep(13);//Delay to get around 75 frames per second
                     //  1000ms/75fps=about 13
