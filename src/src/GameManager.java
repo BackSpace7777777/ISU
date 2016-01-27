@@ -208,7 +208,7 @@ public class GameManager extends Main{
         g.drawString("You have " + health + " lives",(frame.getWidth()/2)-70,675);
         g.setColor(Color.BLACK);//Button text
         g.drawString("Shooter",22,658);
-        g.drawString("$"+(175+(150*amountOfShooter)),24,670);
+        g.drawString("$"+(175+(5*amountOfShooter)),24,670);
         g.drawString("Super",22,717);
         g.drawString("Shooter",22,730);
         g.drawString("$"+(1250+(600*amountOfSuper)),22,742);
@@ -292,9 +292,9 @@ public class GameManager extends Main{
     {
         if(name.equals("ShooterSpawner")&&onMouseToPlace==false)
         {
-            if(money-(175+(150*amountOfShooter))>=0)//Checks if you have money before it takes it away
+            if(money-(175+(5*amountOfShooter))>=0)//Checks if you have money before it takes it away
             {
-                money-=(175+(150*amountOfShooter));
+                money-=(175+(5*amountOfShooter));
                 mouseDown=false;
                 am.tAdd(new Shooter());
                 amountOfShooter++;
