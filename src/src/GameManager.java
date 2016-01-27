@@ -78,7 +78,11 @@ public class GameManager extends Main{
     }
     public boolean isAliveTotal()//Checking health for the main class
     {
-        if(health<=0)return false;
+        if(health<=0)
+        {
+            ended=System.currentTimeMillis();
+            return false;
+        }
         else return true;
     }
     public long timeLasted()//Getting the time that player lasted
