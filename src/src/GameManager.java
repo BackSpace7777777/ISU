@@ -13,9 +13,10 @@ import src.Towers.SuperShooter;
 public class GameManager extends Main{
     private final int[] mpx,mpy;
     private boolean spawnEnemies=false,onMouseToPlace=false,noMoreTime=false;
-    public static int money=500,health=1;
+    public static int money=500,health=100;
     private long start=System.currentTimeMillis(),end=0,hstart=start,hend=0,waveTimeStart=System.currentTimeMillis(),waveTimeNow;
     private long[] waves=new long[6];
+    private int amountOfExplosive=0,amountOfSuper=0,amountOfShooter=0;
     public static ArrayManager am=new ArrayManager();
     private static long killed=0,started,ended;
     public GameManager()
@@ -131,7 +132,7 @@ public class GameManager extends Main{
                     start=System.currentTimeMillis();
                     am.eAdd(new LevelEnemy(5,mpx,mpy));
                 }
-                if(hend-hstart>13000)
+                if(hend-hstart>5000)
                 {
                     hstart=System.currentTimeMillis();
                     am.eAdd(new HeavyEnemy(mpx,mpy));
@@ -144,7 +145,7 @@ public class GameManager extends Main{
                     start=System.currentTimeMillis();
                     am.eAdd(new LevelEnemy(5,mpx,mpy));
                 }
-                if(hend-hstart>5000)
+                if(hend-hstart>2500)
                 {
                     hstart=System.currentTimeMillis();
                     am.eAdd(new HeavyEnemy(mpx,mpy));
@@ -159,12 +160,12 @@ public class GameManager extends Main{
         }
         if(noMoreTime)//If there are no more values in the array it goes to this because there are no more preset waves
         {
-            if(end-start>25)
+            if(end-start>10)
             {
                 start=System.currentTimeMillis();
                 am.eAdd(new LevelEnemy(5,mpx,mpy));
             }
-            if(hend-hstart>1000)
+            if(hend-hstart>500)
             {
                 hstart=System.currentTimeMillis();
                 am.eAdd(new HeavyEnemy(mpx,mpy));
@@ -207,13 +208,13 @@ public class GameManager extends Main{
         g.drawString("You have " + health + " lives",(frame.getWidth()/2)-70,675);
         g.setColor(Color.BLACK);//Button text
         g.drawString("Shooter",22,658);
-        g.drawString("$175",24,670);
+        g.drawString("$"+(175+(150*amountOfShooter)),24,670);
         g.drawString("Super",22,717);
         g.drawString("Shooter",22,730);
-        g.drawString("$1250",22,742);
+        g.drawString("$"+(1250+(600*amountOfSuper)),22,742);
         g.drawString("Explosive",80,658);
         g.drawString("Tower",82,670);
-        g.drawString("$850",82,681);
+        g.drawString("$"+(850+(500*amountOfExplosive)),82,681);
     }
     private void drawEnemies(Graphics g)
     {
@@ -291,9 +292,9 @@ public class GameManager extends Main{
     {
         if(name.equals("ShooterSpawner")&&onMouseToPlace==false)
         {
-            if(money-175>=0)//Checks if you have money before it takes it away
+            if(money-(175+(150*amountOfShooter))>=0)//Checks if you have money before it takes it away
             {
-                money-=175;
+                money-=(175+(150*amountOfShooter));
                 mouseDown=false;
                 am.tAdd(new Shooter());
                 onMouseToPlace=true;
@@ -302,22 +303,24 @@ public class GameManager extends Main{
         }
         else if(name.equals("SuperShooterSpawned")&&onMouseToPlace==false)
         {
-            if(money-1250>=0)
+            if(money-(1250+(600*amountOfSuper))>=0)
             {
-                money-=1250;
+                money-=(1250+(600*amountOfSuper));
                 mouseDown=false;
                 am.tAdd(new SuperShooter());
+                amountOfSuper++;
                 onMouseToPlace=true;
             }
             spawnEnemies=true;
         }
         else if(name.equals("ExplosiveSpawned")&&onMouseToPlace==false)
         {
-            if(money-850>=0)
+            if(money-(850+(500*amountOfExplosive))>=0)
             {
-                money-=850;
+                money-=(850+(500*amountOfExplosive));
                 mouseDown=false;
                 am.tAdd(new Explosive());
+                amountOfExplosive++;
                 onMouseToPlace=true;
             }
             spawnEnemies=true;

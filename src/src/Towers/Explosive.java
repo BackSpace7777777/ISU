@@ -54,7 +54,7 @@ public class Explosive extends GameManager implements Tower{
     }
     private boolean canShoot()
     {
-        if((sTimeEnd-sTimeStart)>800)return true;
+        if((sTimeEnd-sTimeStart)>1000)return true;
         else return false;
     }
     public void exec() {
@@ -69,7 +69,7 @@ public class Explosive extends GameManager implements Tower{
                 else if(target.getX()>x)direction=1;
                 else if(target.getY()<y)direction=0;
                 Random r=new Random();
-                targets=super.splash((r.nextInt(75)+75),target.getX(),target.getY());
+                targets=super.splash((r.nextInt(75)+25),target.getX(),target.getY());
                 for(int i=0;i<targets.length;i++)
                 {
                     super.killLayer(targets[i]);
