@@ -297,6 +297,7 @@ public class GameManager extends Main{
                 money-=(175+(150*amountOfShooter));
                 mouseDown=false;
                 am.tAdd(new Shooter());
+                amountOfShooter++;
                 onMouseToPlace=true;
             }
             spawnEnemies=true;
